@@ -1,5 +1,7 @@
 package kevcold.forohub.infra.auth;
 
+import kevcold.forohub.domain.users.Usuario;
+import kevcold.forohub.domain.users.UsuarioService;
 import kevcold.forohub.infra.configuration.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,31 +21,40 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtil;
     private final UserDetailsService userDetailsService;
+    private final UsuarioService usuarioService;
 
     public AuthService(AuthenticationManager authenticationManager,
                        JwtUtils jwtUtil,
-                       UserDetailsService userDetailsService) {
+                       UserDetailsService userDetailsService,
+                       UsuarioService usuarioService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.usuarioService = usuarioService;
     }
 
-    public String authenticate(String username, String password) throws AuthenticationException {
+    public String authenticate(AuthRequest authRequest) throws AuthenticationException {
+        String username = authRequest.correoElectronico();
+        String password = authRequest.contrasena();
+
         try {
+            // Verificar si el usuario existe
+            Usuario usuario = usuarioService.findUsuarioByCorreoElectronico(username);
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String token = jwtUtil.generateToken(userDetails.getUsername());
-            logger.info("User {} successfully authenticated", username);
+            logger.info("Usuario {} autenticado exitosamente", username);
             return token;
         } catch (BadCredentialsException e) {
-            logger.warn("Authentication failed for user {}: Bad credentials", username);
-            throw new BadCredentialsException("Invalid username or password");
+            logger.warn("La autenticación falló para el usuario {}: Credenciales incorrectas", username);
+            throw new BadCredentialsException("Usuario o contraseña incorrectos");
         } catch (AuthenticationException e) {
-            logger.error("Authentication failed for user {}", username, e);
-            throw e;
+            logger.error("La autenticación falló para el usuario {}", username, e);
+            throw new AuthenticationException("Error en la autenticación para el usuario " + username, e) {};
         }
     }
 }

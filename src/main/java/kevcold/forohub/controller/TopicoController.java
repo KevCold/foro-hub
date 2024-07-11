@@ -1,39 +1,38 @@
 package kevcold.forohub.controller;
 
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import kevcold.forohub.domain.curso.Curso;
-import kevcold.forohub.domain.curso.DatosCurso;
+import kevcold.forohub.domain.topico.TopicoService;
 import kevcold.forohub.domain.topico.DatosRegistroTopico;
-import kevcold.forohub.domain.topico.DatosRespuestaTopico;
-import kevcold.forohub.domain.topico.Topico;
-import kevcold.forohub.repository.ITopicoRepository;
+import kevcold.forohub.domain.topico.RegistroTopicoRespuestaDTO;
+import kevcold.forohub.infra.errors.DuplicateResourceException;
+import kevcold.forohub.infra.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/topicos")
 public class TopicoController {
 
     @Autowired
-    private ITopicoRepository topicoRepository;
+    private TopicoService topicoService;
 
     @PostMapping
-    @Transactional
-    public ResponseEntity<DatosRespuestaTopico> registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
-                                          UriComponentsBuilder uriComponentsBuilder) {
-        Topico topico = topicoRepository.save(new Topico(datosRegistroTopico));
-        DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(topico.getId(), topico.getTitulo(),
-                topico.getMensaje(), topico.getFechaCreacion(), topico.getStatusTopicos(), new DatosCurso(topico.getCurso().getNombre(),
-                topico.getCurso().getCategoria()));
-        URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
-        return ResponseEntity.created(url).body(datosRespuestaTopico);
+    public ResponseEntity<RegistroTopicoRespuestaDTO> registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String correoElectronico = authentication.getName();
+
+            RegistroTopicoRespuestaDTO respuesta = topicoService.registrarTopico(datosRegistroTopico, correoElectronico);
+            return ResponseEntity.status(201).body(respuesta);
+        } catch (DuplicateResourceException e) {
+            return ResponseEntity.status(409).body(new RegistroTopicoRespuestaDTO(null, null, null, e.getMessage()));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(404).body(new RegistroTopicoRespuestaDTO(null, null, null, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new RegistroTopicoRespuestaDTO(null, null, null, "Error al registrar el tópico: " + e.getMessage()));
+        }
     }
 }

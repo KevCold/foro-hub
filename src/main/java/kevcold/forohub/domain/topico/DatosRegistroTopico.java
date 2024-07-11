@@ -1,27 +1,25 @@
 package kevcold.forohub.domain.topico;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import kevcold.forohub.domain.curso.DatosCurso;
-import kevcold.forohub.domain.users.DatosUsuario;
 
 import java.time.LocalDateTime;
 
 public record DatosRegistroTopico(
-
-        @NotBlank
+        @NotBlank(message = "El título es obligatorio")
         String titulo,
-        @NotBlank
+
+        @NotBlank(message = "El mensaje es obligatorio")
         String mensaje,
-        @NotNull
+
+        @NotNull(message = "La fecha de creación es obligatoria")
         LocalDateTime fechaCreacion,
-        @NotNull
+
+        @NotNull(message = "El estado del tópico es obligatorio")
         StatusTopicos statusTopicos,
-        @NotNull
-        @Valid
-        DatosUsuario autor,
-        @NotNull
-        @Valid
-        DatosCurso curso) {
+
+        @NotNull(message = "El curso es obligatorio")
+        DatosCurso curso
+) {
 }

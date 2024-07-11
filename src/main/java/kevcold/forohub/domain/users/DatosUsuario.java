@@ -11,7 +11,7 @@ public record DatosUsuario(
         @Email
         String correoElectronico,
         @NotBlank
-        @Size(min = 6, max = 255)
+        @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
         String contrasena
 ) {
 }

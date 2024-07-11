@@ -44,7 +44,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("No se pudo autentificar el Usuario", e.getMessage());
+            logger.error("No se pudo autentificar el Usuario", e);
         }
 
         chain.doFilter(request, response);
