@@ -20,7 +20,7 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    @Column(unique = true)
+    @Column(name = "correo_electronico", unique = true)
     private String correoElectronico;
     private String contrasena;
 
@@ -35,6 +35,12 @@ public class Usuario {
     public Usuario(DatosUsuario autor) {
         this.nombre = autor.nombre();
         this.correoElectronico = autor.correoElectronico();
-        this.contrasena = autor.constrasena();
+        this.contrasena = autor.contrasena();
+    }
+
+    public Usuario(String nombre, String correoElectronico, String contrasena) {
+        this.nombre = nombre;
+        this.correoElectronico = correoElectronico;
+        this.contrasena = contrasena;
     }
 }

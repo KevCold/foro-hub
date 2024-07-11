@@ -1,5 +1,6 @@
 spring:
-  profile.active: dev, test, prod
+  profiles:
+    active: dev, test, prod
   datasource:
     url: jdbc:mysql://${DB_HOST}/foro_hub
     username: ${DB_USER_MYSQL}
@@ -13,8 +14,9 @@ spring:
 server:
   error:
     include-stacktrace: never
+
 api:
   security:
-    secret: ${JWT_SECRET:45632710}
-
-
+    secret: "${JWT_SECRET:123456}"
+    jwt:
+      expiration: 3600000  # Tiempo de expiración de 1 hora en milisegundos
