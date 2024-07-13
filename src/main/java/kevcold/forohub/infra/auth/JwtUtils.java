@@ -1,4 +1,4 @@
-package kevcold.forohub.infra.configuration;
+package kevcold.forohub.infra.auth;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -67,7 +67,7 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (JwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
+            logger.error("Token invalido JWT: {}", e.getMessage());
         }
         return false;
     }

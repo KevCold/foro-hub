@@ -1,6 +1,7 @@
-package kevcold.forohub.domain.users;
+package kevcold.forohub.domain.users.service;
 
-import kevcold.forohub.repository.IUsuarioRepository;
+import kevcold.forohub.domain.users.Usuario;
+import kevcold.forohub.domain.users.repository.IUsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;

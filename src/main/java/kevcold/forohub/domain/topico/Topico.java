@@ -20,31 +20,24 @@ public class Topico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String titulo;
-
     @Lob
-    @Column(nullable = false)
     private String mensaje;
-
-    @Column(name = "fecha_creacion", nullable = false)
+    @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private StatusTopicos statusTopicos;
-
     @ManyToOne
     @JoinColumn(name = "autor_id")
     private Usuario autor;
-
     @ManyToOne
     @JoinColumn(name = "curso_id")
     private Curso curso;
-
     @OneToMany(mappedBy = "topico")
     private Set<Respuesta> respuestas;
+
+    // Nuevo atributo
+    private boolean activo;
 
     public Topico(DatosRegistroTopico datosRegistroTopico){
         this.titulo = datosRegistroTopico.titulo();
@@ -52,5 +45,18 @@ public class Topico {
         this.fechaCreacion = datosRegistroTopico.fechaCreacion();
         this.statusTopicos = datosRegistroTopico.statusTopicos();
         this.curso = new Curso(datosRegistroTopico.curso());
+        this.activo = true;
+    }
+
+    public void actualizarTopico(DatosActualizarTopico datosActualizarTopico) {
+        if (datosActualizarTopico.mensaje() != null) {
+            this.mensaje = datosActualizarTopico.mensaje();
+        }
+        if (datosActualizarTopico.status() != null) {
+            this.statusTopicos = datosActualizarTopico.status();
+        }
+        if (datosActualizarTopico.curso() != null) {
+            this.curso.actualizarCurso(datosActualizarTopico.curso());
+        }
     }
 }

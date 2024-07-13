@@ -1,5 +1,6 @@
 package kevcold.forohub.infra.configuration;
 
+import kevcold.forohub.infra.auth.JwtUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

@@ -1,8 +1,11 @@
-package kevcold.forohub.domain.users;
+package kevcold.forohub.domain.users.service;
 
+import kevcold.forohub.domain.users.RegistroUsuarioDTO;
+import kevcold.forohub.domain.users.RegistroUsuarioRespuestaDTO;
+import kevcold.forohub.domain.users.Usuario;
 import kevcold.forohub.infra.errors.DuplicateResourceException;
 import kevcold.forohub.infra.errors.ResourceNotFoundException;
-import kevcold.forohub.repository.IUsuarioRepository;
+import kevcold.forohub.domain.users.repository.IUsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;

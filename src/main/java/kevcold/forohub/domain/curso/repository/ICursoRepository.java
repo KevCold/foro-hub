@@ -1,4 +1,4 @@
-package kevcold.forohub.repository;
+package kevcold.forohub.domain.curso.repository;
 
 import kevcold.forohub.domain.curso.Curso;
 import org.springframework.data.jpa.repository.JpaRepository;

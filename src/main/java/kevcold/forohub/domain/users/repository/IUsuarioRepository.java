@@ -1,4 +1,4 @@
-package kevcold.forohub.repository;
+package kevcold.forohub.domain.users.repository;
 
 import kevcold.forohub.domain.users.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;

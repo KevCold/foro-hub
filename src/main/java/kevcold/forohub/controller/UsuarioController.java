@@ -1,7 +1,7 @@
 package kevcold.forohub.controller;
 
 import jakarta.validation.Valid;
-import kevcold.forohub.domain.users.UsuarioService;
+import kevcold.forohub.domain.users.service.UsuarioService;
 import kevcold.forohub.domain.users.RegistroUsuarioDTO;
 import kevcold.forohub.domain.users.RegistroUsuarioRespuestaDTO;
 import kevcold.forohub.infra.errors.DuplicateResourceException;

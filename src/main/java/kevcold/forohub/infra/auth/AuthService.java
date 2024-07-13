@@ -1,8 +1,7 @@
 package kevcold.forohub.infra.auth;
 
 import kevcold.forohub.domain.users.Usuario;
-import kevcold.forohub.domain.users.UsuarioService;
-import kevcold.forohub.infra.configuration.JwtUtils;
+import kevcold.forohub.domain.users.service.UsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
