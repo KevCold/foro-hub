@@ -50,11 +50,8 @@ public class TopicoService {
             Topico topicoGuardado = topicoRepository.save(topico);
             return new RegistroTopicoRespuestaDTO(
                     topicoGuardado.getId(),
-                    topicoGuardado.getTitulo(),
-                    topicoGuardado.getMensaje(),
-                    topicoGuardado.getStatusTopicos(),
-                    curso,
-                    autor,
+                    curso.getId(),
+                    autor.getId(),
                     "Tópico registrado exitosamente"
             );
         } catch (DataIntegrityViolationException e) {
@@ -75,11 +72,9 @@ public class TopicoService {
         topico.actualizarTopico(datosActualizarTopico);
         return new RegistroTopicoRespuestaDTO(
                 topico.getId(),
-                topico.getTitulo(),
-                topico.getMensaje(),
-                topico.getStatusTopicos(),
-                topico.getCurso(),
-                topico.getAutor()
+                topico.getCurso().getId(),
+                topico.getAutor().getId(),
+                "Tópico actualizado exitosamente"
         );
     }
 
@@ -89,11 +84,9 @@ public class TopicoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Tópico no encontrado"));
         return new RegistroTopicoRespuestaDTO(
                 topico.getId(),
-                topico.getTitulo(),
-                topico.getMensaje(),
-                topico.getStatusTopicos(),
-                topico.getCurso(),
-                topico.getAutor()
+                topico.getCurso().getId(),
+                topico.getAutor().getId(),
+                "Operación exitosa"
         );
     }
 

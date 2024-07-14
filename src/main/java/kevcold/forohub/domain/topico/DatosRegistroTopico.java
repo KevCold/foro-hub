@@ -1,5 +1,6 @@
 package kevcold.forohub.domain.topico;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import kevcold.forohub.domain.curso.DatosCurso;
@@ -20,6 +21,6 @@ public record DatosRegistroTopico(
         StatusTopicos statusTopicos,
 
         @NotNull(message = "El curso es obligatorio")
+        @Valid
         DatosCurso curso
-) {
-}
+) {}
