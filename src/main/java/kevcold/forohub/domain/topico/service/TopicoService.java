@@ -5,6 +5,7 @@ import kevcold.forohub.domain.users.Usuario;
 import kevcold.forohub.domain.curso.Curso;
 import kevcold.forohub.infra.errors.DuplicateResourceException;
 import kevcold.forohub.infra.errors.ResourceNotFoundException;
+import kevcold.forohub.infra.errors.UnauthorizedException;
 import kevcold.forohub.domain.topico.repository.ITopicoRepository;
 import kevcold.forohub.domain.users.repository.IUsuarioRepository;
 import kevcold.forohub.domain.curso.repository.ICursoRepository;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
@@ -90,21 +93,48 @@ public class TopicoService {
         );
     }
 
-    // Método de borrado lógico
     @Transactional
     public void borrarTopicoLogico(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String correoElectronico = authentication.getName();
+        Usuario usuarioActual = usuarioRepository.findByCorreoElectronico(correoElectronico)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
         Topico topico = topicoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tópico no encontrado"));
+
+        boolean esAdminOModerador = usuarioActual.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ADMIN") || role.getName().equals("MODERATOR"));
+
+        if (!usuarioActual.getId().equals(topico.getAutor().getId()) && !esAdminOModerador) {
+            throw new UnauthorizedException("No tienes permiso para eliminar este tópico.");
+        }
+
         topico.setActivo(false);
         topicoRepository.save(topico);
     }
 
-    // Método de borrado permanente
     @Transactional
     public void borrarTopicoPermanente(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String correoElectronico = authentication.getName();
+        Usuario usuarioActual = usuarioRepository.findByCorreoElectronico(correoElectronico)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        Topico topico = topicoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tópico no encontrado"));
+
+        boolean esAdminOModerador = usuarioActual.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ADMIN") || role.getName().equals("MODERATOR"));
+
+        if (!usuarioActual.getId().equals(topico.getAutor().getId()) && !esAdminOModerador) {
+            throw new UnauthorizedException("No tienes permiso para eliminar este tópico.");
+        }
+
         if (!topicoRepository.existsById(id)) {
             throw new ResourceNotFoundException("Tópico no encontrado");
         }
+
         topicoRepository.deleteById(id);
     }
 }

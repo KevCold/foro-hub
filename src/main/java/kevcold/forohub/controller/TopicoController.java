@@ -3,9 +3,9 @@ package kevcold.forohub.controller;
 import jakarta.validation.Valid;
 import kevcold.forohub.domain.topico.DatosActualizarTopico;
 import kevcold.forohub.domain.topico.DatosListadoTopicos;
-import kevcold.forohub.domain.topico.service.TopicoService;
 import kevcold.forohub.domain.topico.DatosRegistroTopico;
 import kevcold.forohub.domain.topico.RegistroTopicoRespuestaDTO;
+import kevcold.forohub.domain.topico.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,6 @@ public class TopicoController {
     public ResponseEntity<RegistroTopicoRespuestaDTO> registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String correoElectronico = authentication.getName();
-
         RegistroTopicoRespuestaDTO respuesta = topicoService.registrarTopico(datosRegistroTopico, correoElectronico);
         return ResponseEntity.status(201).body(respuesta);
     }

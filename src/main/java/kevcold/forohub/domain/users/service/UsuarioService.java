@@ -2,7 +2,9 @@ package kevcold.forohub.domain.users.service;
 
 import kevcold.forohub.domain.users.RegistroUsuarioDTO;
 import kevcold.forohub.domain.users.RegistroUsuarioRespuestaDTO;
+import kevcold.forohub.domain.users.Role;
 import kevcold.forohub.domain.users.Usuario;
+import kevcold.forohub.domain.users.repository.IRoleRepository;
 import kevcold.forohub.infra.errors.DuplicateResourceException;
 import kevcold.forohub.infra.errors.ResourceNotFoundException;
 import kevcold.forohub.domain.users.repository.IUsuarioRepository;
@@ -19,12 +21,21 @@ public class UsuarioService {
     private IUsuarioRepository usuarioRepository;
 
     @Autowired
+    private IRoleRepository roleRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Transactional
     public RegistroUsuarioRespuestaDTO registrarUsuario(RegistroUsuarioDTO registroUsuarioDTO) {
         String encodedPassword = passwordEncoder.encode(registroUsuarioDTO.contrasena());
         Usuario usuario = new Usuario(registroUsuarioDTO.nombre(), registroUsuarioDTO.correoElectronico(), encodedPassword);
+
+        Role userRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new ResourceNotFoundException("Rol USER no encontrado"));
+
+        usuario.getRoles().add(userRole);
+
         try {
             Usuario usuarioGuardado = usuarioRepository.save(usuario);
             return new RegistroUsuarioRespuestaDTO(usuarioGuardado.getId(), usuarioGuardado.getNombre(), usuarioGuardado.getCorreoElectronico(), usuarioGuardado.getContrasena());
@@ -38,3 +49,4 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el correo: " + correoElectronico));
     }
 }
+

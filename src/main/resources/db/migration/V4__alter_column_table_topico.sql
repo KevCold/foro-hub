@@ -1,1 +1,0 @@
-ALTER TABLE Topico CHANGE COLUMN status status_topicos VARCHAR(50) NOT NULL;

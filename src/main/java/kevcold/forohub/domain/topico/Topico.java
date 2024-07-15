@@ -33,10 +33,6 @@ public class Topico {
     @ManyToOne
     @JoinColumn(name = "curso_id")
     private Curso curso;
-    @OneToMany(mappedBy = "topico")
-    private Set<Respuesta> respuestas;
-
-    // Nuevo atributo
     private boolean activo;
 
     public Topico(DatosRegistroTopico datosRegistroTopico){

@@ -24,7 +24,7 @@ public class UsuarioController {
         } catch (DuplicateResourceException e) {
             return ResponseEntity.status(409).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al registrar el usuario: " + e.getMessage()); // 500 Internal Server Error with message
+            return ResponseEntity.status(500).body("Error al registrar el usuario: " + e.getMessage());
         }
     }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kevcold.forohub.domain.perfil.Perfil;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Table(name = "usuario")
@@ -18,17 +19,24 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    @Column(name = "correo_electronico", unique = true)
     private String correoElectronico;
     private String contrasena;
 
     @ManyToMany
     @JoinTable(
-            name = "Usuario_Perfil",
+            name = "usuario_perfil",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "perfil_id")
     )
     private Set<Perfil> perfiles;
+
+    @ManyToMany
+    @JoinTable(
+            name = "usuario_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     public Usuario(DatosUsuario autor) {
         this.nombre = autor.nombre();
