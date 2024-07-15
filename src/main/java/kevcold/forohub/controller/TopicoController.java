@@ -1,5 +1,6 @@
 package kevcold.forohub.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import kevcold.forohub.domain.topico.DatosActualizarTopico;
 import kevcold.forohub.domain.topico.DatosListadoTopicos;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/topicos")
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
     @Autowired

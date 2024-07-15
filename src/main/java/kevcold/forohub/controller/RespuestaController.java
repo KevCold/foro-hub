@@ -1,5 +1,6 @@
 package kevcold.forohub.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import kevcold.forohub.domain.respuesta.DatosActualizarRespuestas;
 import kevcold.forohub.domain.respuesta.DatosRegistroRespuestas;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/respuesta")
+@SecurityRequirement(name = "bearer-key")
 public class RespuestaController {
 
     @Autowired
